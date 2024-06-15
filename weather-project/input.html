@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+     integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" 
+     crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>wheather app</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+
+        <div class="search">
+            <input type="text" placeholder="ener the city name">
+        
+            <button> <img src="search.img.png"></img></button>
+        </div>
+        <div class="error">
+            <p>Invalid input</p>
+           </div>
+        <div class="wheather">
+            <img class="wheather-icon" src="rain.img">
+            <h1 class="temp">22°C</h1>
+            <h2 class="city">new york </h2>
+              <div class="details">
+                <div class="col">
+                  <img  src="humidity.png" > </img>
+                  <div>
+                    <p class="humidity">50%</p>
+                    <p>humidity</p>
+                  </div>
+              </div>
+              <div class="col">
+                <img  src="wind.png" > </img>
+                <div>
+                  <p class="wind">15 km/hours </p>
+                  <p>wind speed</p>
+                </div>
+            </div>  
+
+        </div>
+    </div>
+</body>
+
+<script>
+ const apikey="9a2dccd81177e4e80438f0bf7b26cf0f";
+ const apiurl="https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
+     const searchbox=document.querySelector(".search input");
+     const searchbtn=document.querySelector('.search button');
+     const weatherIcon=document.querySelector('.wheather-icon')
+  async function changewheatr(city){
+    const response=await fetch(apiurl + city +`&appid=${apikey}`);
+     let data= await response.json();
+     //console.log(data);
+        if(response.status==404){
+            document.querySelector('.error').style.display="block";
+            document.querySelector('.wheather').style.display="none";
+       
+        }
+        else{
+  document.querySelector(".city").innerHTML  = data.name;
+     document.querySelector(".temp").innerHTML   = Math.round(data.main.temp)+"°C";
+     document.querySelector(".humidity").innerHTML = data.main.humidity+"%";
+     document.querySelector(".wind").innerHTML = data.wind.speed+"km/hr";
+
+    if(data.weather[0].main == 'Clear')
+     {
+        weatherIcon.src="clear.img.img";
+     }
+      else if(data.weather[0].main == 'Rain')
+     {
+        weatherIcon.src="rainonly.img";
+     }
+     else if(data.weather[0].main == 'Clouds')
+     {
+        weatherIcon.innerHTML="cloud.img";
+     }
+     else{
+        weatherIcon.src="rain.img";
+     }
+     document.querySelector('.wheather').style.display='block'
+     document.querySelector('.error').style.display="none";    
+       
+    }
+    
+  }
+   searchbtn.addEventListener('click',()=>{
+    changewheatr(searchbox.value);
+
+   })
+
+</script>
+</html>
